@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal - RH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #B4E9B7 0%, #63BA68 100%);
+            min-height: 100vh;
+        }
+
+        .browser-bar {
+            background-color: #e8e8e8;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background-color: #d0d0d0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .nav-btn:hover {
+            background-color: #c0c0c0;
+        }
+
+        .url-bar {
+            flex: 1;
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #d0d0d0;
+        }
+
+        .lock-icon {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .url-text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #63BA68 0%, #296A2D 100%);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            color: #B4E9B7;
+            font-size: 1.1em;
+        }
+
+        .menu-bar {
+            background-color: #63BA68;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .menu-btn {
+            background-color: #296A2D;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-btn:last-child {
+            border-right: none;
+        }
+
+        .menu-btn:hover {
+            background-color: #1f5323;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-btn:active {
+            transform: translateY(0);
+        }
+
+        .content {
+            background-color: white;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .welcome-section {
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            color: #296A2D;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .welcome-section p {
+            color: #555;
+            font-size: 1.15em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #B4E9B7 0%, #63BA68 100%);
+            padding: 30px 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(41, 106, 45, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #296A2D;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #1f5323;
+            font-size: 0.95em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div class="header">
+        <div class="container">
+            <h1>Sistema de Recursos Humanos</h1>
+            <p>Gestión integral del capital humano de tu empresa</p>
+        </div>
+    </div>
+    
+    <div class="menu-bar">
+        <div class="menu-container">
+            <button class="menu-btn" onclick="location.href='{% url 'Empleado' %}'">Empleado</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Asistencia' %}'">Asistencia</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Horarios' %}'">Horarios</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Reportes' %}'">Reportes</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Dashboard' %}'">Dashboard</button>
+    </div>
+
+    <div class="content">
+        <div class="welcome-section">
+            <h2>Bienvenido al Sistema de RH</h2>
+            <p>Administra de manera eficiente todos los aspectos relacionados con el personal de tu organización. Selecciona una opción del menú para comenzar.</p>
+        </div>
+
+    <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Empleados</h3>
+                <p>Gestiona la información de tu personal</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Asistencia</h3>
+                <p>Control de asistencia y puntualidad</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🕐</div>
+                <h3>Horarios</h3>
+                <p>Administra turnos y horarios</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Reportes</h3>
+                <p>Análisis y estadísticas detalladas</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Sistema de Recursos Humanos - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>
+</body>
+</html>

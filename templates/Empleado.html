@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo: Empleados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #B4E9B7 0%, #a8e3ab 100%);
+            min-height: 100vh;
+        }
+
+        .browser-bar {
+            background-color: #e8e8e8;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background-color: #d0d0d0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .nav-btn:hover {
+            background-color: #c0c0c0;
+        }
+
+        .url-bar {
+            flex: 1;
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #d0d0d0;
+        }
+
+        .lock-icon {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .url-text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .module-title {
+            background-color: #333;
+            color: #B4E9B7;
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .menu-bar {
+            background-color: #63BA68;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .menu-btn {
+            background-color: #296A2D;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-btn:last-child {
+            border-right: none;
+        }
+
+        .menu-btn:hover {
+            background-color: #1f5323;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-container {
+            background-color: #B4E9B7;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #296A2D;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .required-fields {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-left: 4px solid #296A2D;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .required-fields p {
+            color: #1f5323;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #1f5323;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #296A2D;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(41, 106, 45, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .menu-container {
+                flex-wrap: wrap;
+            }
+
+            .menu-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+    </style>
+    <script>
+        function validarFormulario(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById("id").value.trim();
+            const nombre = document.getElementById("nombre").value.trim();
+            const departamento = document.getElementById("departamento").value.trim();
+            const puesto = document.getElementById("puesto").value.trim();
+            const estatus = document.getElementById("estatus").value.trim();
+            
+            if (id === "" || nombre === "" || departamento === "" || puesto === "" || estatus === "") {
+                alert("⚠️ Por favor completa todos los campos obligatorios.");
+                return false;
+            }
+            
+            alert("✅ Empleado registrado exitosamente");
+            return true;
+        }
+
+        function actualizarEmpleado() {
+            alert("📝 Función de actualizar empleado");
+        }
+
+        function eliminarEmpleado() {
+            if (confirm("⚠️ ¿Estás seguro de que deseas eliminar este empleado?")) {
+                alert("🗑️ Empleado eliminado");
+            }
+        }
+
+        function buscarEmpleado() {
+            alert("🔍 Función de búsqueda de empleado");
+        }
+    </script>
+</head>
+<body>
+    
+
+    <div class="module-title">
+        MÓDULO: EMPLEADOS
+    </div>
+
+   <div class="menu-bar">
+        <div class="menu-container">
+            <button class="menu-btn" onclick="location.href='{% url 'Empleado' %}'">Empleado</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Asistencia' %}'">Asistencia</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Horarios' %}'">Horarios</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Reportes' %}'">Reportes</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Dashboard' %}'">Dashboard</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Menu' %}'">Menu</button>
+    </div>
+
+    </div>
+
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Registro de Empleado</h2>
+            </div>
+
+            <div class="required-fields">
+                <p>Campos obligatorios:</p>
+            </div>
+
+            <form onsubmit="return validarFormulario(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input type="text" id="id" name="id" placeholder="ID del empleado">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo:</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre completo del empleado">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="departamento">Departamento:</label>
+                        <input type="text" id="departamento" name="departamento" placeholder="Departamento">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="puesto">Puesto:</label>
+                        <input type="text" id="puesto" name="puesto" placeholder="Puesto">
+                    </div>
+
+                    <div class="form-group form-row-full">
+                        <label for="estatus">Estatus en la empresa:</label>
+                        <select id="estatus" name="estatus">
+                            <option value="">Seleccionar estatus...</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="vacaciones">En vacaciones</option>
+                            <option value="permiso">Con permiso</option>
+                            <option value="incapacidad">Incapacidad</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-primary" onclick="actualizarEmpleado()">Actualizar</button>
+                    <button type="button" class="btn btn-primary" onclick="eliminarEmpleado()">Eliminar</button>
+                    <button type="button" class="btn btn-primary" onclick="buscarEmpleado()">Buscar empleado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

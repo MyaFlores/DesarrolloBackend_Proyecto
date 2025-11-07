@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo: Asistencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #B4E9B7 0%, #a8e3ab 100%);
+            min-height: 100vh;
+        }
+
+        .browser-bar {
+            background-color: #e8e8e8;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background-color: #d0d0d0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .nav-btn:hover {
+            background-color: #c0c0c0;
+        }
+
+        .url-bar {
+            flex: 1;
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #d0d0d0;
+        }
+
+        .lock-icon {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .url-text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .module-title {
+            background-color: #333;
+            color: #B4E9B7;
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .menu-bar {
+            background-color: #63BA68;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .menu-btn {
+            background-color: #296A2D;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-btn:last-child {
+            border-right: none;
+        }
+
+        .menu-btn:hover {
+            background-color: #1f5323;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .search-section {
+            background-color: #B4E9B7;
+            border: 3px solid #4fb3d4;
+            border-radius: 15px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(79, 179, 212, 0.3);
+        }
+
+        .search-title {
+            text-align: center;
+            color: #1f5323;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .search-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-input-group label {
+            color: #1f5323;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .search-input-group input {
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-group input:focus {
+            outline: none;
+            border-color: #4fb3d4;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(79, 179, 212, 0.2);
+        }
+
+        .records-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .record-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .record-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .record-title {
+            color: #1f5323;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #B4E9B7;
+        }
+
+        .record-info {
+            margin-bottom: 15px;
+        }
+
+        .record-info p {
+            color: #333;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin-bottom: 5px;
+        }
+
+        .record-info strong {
+            color: #296A2D;
+            font-weight: 600;
+        }
+
+        .record-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-save {
+            background-color: #d0d0d0;
+            color: #333;
+        }
+
+        .btn-save:hover {
+            background-color: #bbb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-update {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #63BA68;
+            display: none;
+        }
+
+        .empty-state.visible {
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .records-section {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-container {
+                flex-wrap: wrap;
+            }
+
+            .menu-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .search-section {
+                padding: 20px;
+            }
+        }
+    </style>
+    <script>
+        function buscarEmpleado() {
+            const nombre = document.getElementById("nombre-completo").value.trim();
+            
+            if (nombre === "") {
+                alert("⚠️ Por favor ingresa un nombre para buscar.");
+                return;
+            }
+            
+            // Simular búsqueda
+            alert(`🔍 Buscando registros de asistencia para: ${nombre}`);
+            
+            // Mostrar las tarjetas de ejemplo
+            document.querySelectorAll('.record-card').forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+
+        function cerrarTarjeta(elemento) {
+            elemento.closest('.record-card').style.display = 'none';
+        }
+
+        function guardarRegistro(tipo) {
+            alert(`💾 Registro de ${tipo} guardado exitosamente`);
+        }
+
+        function actualizarRegistro(tipo) {
+            alert(`📝 Registro de ${tipo} actualizado exitosamente`);
+        }
+
+        // Permitir buscar con Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('nombre-completo').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    buscarEmpleado();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    
+
+    <div class="module-title">
+        MÓDULO: ASISTENCIA
+    </div>
+
+    <div class="menu-bar">
+        <div class="menu-container">
+            <button class="menu-btn" onclick="location.href='{% url 'Empleado' %}'">Empleado</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Asistencia' %}'">Asistencia</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Horarios' %}'">Horarios</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Reportes' %}'">Reportes</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Dashboard' %}'">Dashboard</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Menu' %}'">Menu</button>
+    </div>
+</div>
+
+    <div class="main-content">
+        <div class="search-section">
+            <div class="search-title">Buscar empleado por nombre completo</div>
+            <div class="search-input-group">
+                <label for="nombre-completo">Nombre completo:</label>
+                <input type="text" id="nombre-completo" name="nombre-completo" placeholder="Ingresa el nombre completo del empleado">
+            </div>
+        </div>
+
+        <div class="records-section">
+            <div class="record-card">
+                <button class="close-btn" onclick="cerrarTarjeta(this)">×</button>
+                <h3 class="record-title">Entradas</h3>
+                <div class="record-info">
+                    <p><strong>Empleado:</strong> María José Martínez Lomelí</p>
+                    <p><strong>Fecha:</strong> 31/10/2025</p>
+                    <p><strong>Hora:</strong> 10:00 AM</p>
+                </div>
+                <div class="record-buttons">
+                    <button class="btn btn-save" onclick="guardarRegistro('entrada')">Guardar</button>
+                    <button class="btn btn-update" onclick="actualizarRegistro('entrada')">Actualizar</button>
+                </div>
+            </div>
+
+            <div class="record-card">
+                <button class="close-btn" onclick="cerrarTarjeta(this)">×</button>
+                <h3 class="record-title">Salidas</h3>
+                <div class="record-info">
+                    <p><strong>Empleado:</strong> María José Martínez Lomelí</p>
+                    <p><strong>Fecha:</strong> 31/10/2025</p>
+                    <p><strong>Hora:</strong> 17:00 PM</p>
+                </div>
+                <div class="record-buttons">
+                    <button class="btn btn-save" onclick="guardarRegistro('salida')">Guardar</button>
+                    <button class="btn btn-update" onclick="actualizarRegistro('salida')">Actualizar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-state">
+            <h3>📋 Sin registros</h3>
+            <p>Usa el buscador para encontrar los registros de asistencia de un empleado</p>
+        </div>
+    </div>
+</body>
+</html>
