@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo: Reportes</title>
+    <title>Generación de Reportes - HR System</title>
     <style>
         * {
             margin: 0;
@@ -17,150 +17,252 @@
             min-height: 100vh;
         }
 
-        .browser-bar {
-            background-color: #e8e8e8;
-            padding: 12px 15px;
+        /* Barra superior */
+        .top-nav {
+            background-color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .top-nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #ccc;
+            gap: 15px;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: none;
-            background-color: #d0d0d0;
-            cursor: pointer;
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #296A2D 0%, #63BA68 100%);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(41, 106, 45, 0.3);
+        }
+
+        .logo-text h2 {
+            color: #296A2D;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .logo-text p {
             color: #666;
+            font-size: 0.8em;
         }
 
-        .nav-btn:hover {
-            background-color: #c0c0c0;
-        }
-
-        .url-bar {
-            flex: 1;
-            background-color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+        .breadcrumb {
             display: flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid #d0d0d0;
-        }
-
-        .lock-icon {
             color: #666;
-            font-size: 14px;
+            font-size: 0.9em;
         }
 
-        .url-text {
-            color: #333;
-            font-size: 14px;
+        .breadcrumb a {
+            color: #296A2D;
+            text-decoration: none;
+            font-weight: 500;
         }
 
-        .module-title {
-            background-color: #333;
-            color: #B4E9B7;
-            padding: 8px 20px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .breadcrumb a:hover {
+            text-decoration: underline;
         }
 
+        .breadcrumb span {
+            color: #999;
+        }
+
+        /* Menú de navegación */
         .menu-bar {
-            background-color: #63BA68;
-            padding: 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .menu-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
             gap: 0;
         }
 
         .menu-btn {
-            background-color: #296A2D;
-            color: white;
+            background-color: transparent;
+            color: #333;
             border: none;
-            padding: 16px 35px;
-            font-size: 15px;
+            padding: 18px 35px;
+            font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
         }
 
-        .menu-btn:last-child {
-            border-right: none;
+        .menu-btn.active {
+            color: #296A2D;
+            background-color: rgba(180, 233, 183, 0.2);
+        }
+
+        .menu-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #296A2D, #63BA68);
         }
 
         .menu-btn:hover {
-            background-color: #1f5323;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #296A2D;
+            background-color: rgba(180, 233, 183, 0.1);
         }
 
+        /* Contenido principal */
         .main-content {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 30px;
         }
 
         .page-header {
+            background: white;
+            padding: 35px 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
             text-align: center;
-            margin-bottom: 35px;
         }
 
-        .page-header h2 {
+        .page-header h1 {
             color: #296A2D;
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
         .page-header p {
-            color: #1f5323;
-            font-size: 1.05em;
+            color: #666;
+            font-size: 1.1em;
         }
 
+        /* Tipos de reportes */
+        .report-types {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .report-types-title {
+            color: #296A2D;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .report-type-card {
+            background: linear-gradient(135deg, #B4E9B7 0%, #63BA68 100%);
+            padding: 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .report-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(41, 106, 45, 0.3);
+        }
+
+        .report-type-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .report-type-card h4 {
+            color: #296A2D;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .report-type-card p {
+            color: #1f5323;
+            font-size: 0.9em;
+        }
+
+        /* Contenedor del formulario */
         .report-container {
             background-color: white;
             border-radius: 15px;
             padding: 40px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header {
+            border-bottom: 3px solid #B4E9B7;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #296A2D;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 0.95em;
         }
 
         .section-title {
             color: #296A2D;
             font-size: 1.3em;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #B4E9B7;
+            border-bottom: 2px solid #e0e0e0;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .section-icon {
-            font-size: 1.2em;
+            font-size: 1.3em;
         }
 
         .form-section {
@@ -198,10 +300,10 @@
         .form-group input,
         .form-group select,
         .form-group textarea {
-            padding: 12px 15px;
+            padding: 14px 18px;
             border: 2px solid #e0e0e0;
-            background-color: #f8f8f8;
-            border-radius: 8px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
             font-size: 0.95em;
             color: #333;
             transition: all 0.3s ease;
@@ -229,37 +331,40 @@
             align-items: center;
         }
 
-        .date-range span {
-            color: #666;
-            font-weight: 600;
+        .date-separator {
+            color: #296A2D;
+            font-size: 1.5em;
+            font-weight: 700;
             text-align: center;
         }
 
         .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            background-color: #f8f8f8;
-            border-radius: 6px;
+            gap: 10px;
+            padding: 12px 18px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
         .checkbox-item:hover {
-            background-color: #B4E9B7;
+            background: linear-gradient(135deg, #B4E9B7 0%, #a8e3ab 100%);
+            border-color: #63BA68;
         }
 
         .checkbox-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
             accent-color: #296A2D;
         }
@@ -269,20 +374,29 @@
             cursor: pointer;
             font-weight: 500;
             color: #333;
+            font-size: 0.95em;
         }
 
         .info-box {
-            background-color: #e8f5e9;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             border-left: 4px solid #296A2D;
-            padding: 15px 20px;
-            border-radius: 8px;
+            padding: 18px 25px;
+            border-radius: 10px;
             margin-bottom: 25px;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+        }
+
+        .info-icon {
+            font-size: 1.8em;
+            color: #296A2D;
         }
 
         .info-box p {
             color: #1f5323;
             font-size: 0.95em;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .info-box strong {
@@ -294,15 +408,15 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-top: 35px;
-            padding-top: 25px;
-            border-top: 2px solid #e0e0e0;
+            padding-top: 30px;
+            border-top: 3px solid #e0e0e0;
         }
 
         .btn {
-            padding: 14px 20px;
+            padding: 16px 25px;
             border: none;
-            border-radius: 8px;
-            font-size: 0.95em;
+            border-radius: 10px;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -311,40 +425,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-generate {
-            background-color: #296A2D;
+            background: linear-gradient(135deg, #296A2D 0%, #1f5323 100%);
             color: white;
         }
 
         .btn-generate:hover {
-            background-color: #1f5323;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(41, 106, 45, 0.4);
+            box-shadow: 0 6px 20px rgba(41, 106, 45, 0.4);
         }
 
         .btn-preview {
-            background-color: #63BA68;
+            background: linear-gradient(135deg, #63BA68 0%, #4fa157 100%);
             color: white;
         }
 
         .btn-preview:hover {
-            background-color: #4fa157;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 186, 104, 0.4);
+            box-shadow: 0 6px 20px rgba(99, 186, 104, 0.4);
         }
 
         .btn-clear {
-            background-color: #e0e0e0;
+            background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
             color: #333;
         }
 
         .btn-clear:hover {
-            background-color: #d0d0d0;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn:active {
@@ -360,7 +471,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .date-range span {
+            .date-separator {
                 display: none;
             }
 
@@ -374,11 +485,24 @@
 
             .menu-btn {
                 flex: 1;
-                min-width: 120px;
+                min-width: 100px;
+                padding: 15px 20px;
             }
 
             .report-container {
                 padding: 25px;
+            }
+
+            .page-header {
+                padding: 25px 20px;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .report-cards {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -401,7 +525,6 @@
                 return false;
             }
             
-            // Verificar que al menos una opción esté seleccionada
             const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
             const algunoSeleccionado = Array.from(checkboxes).some(cb => cb.checked);
             
@@ -410,7 +533,7 @@
                 return false;
             }
             
-            alert('✅ Generando reporte...\n\nEl reporte se descargará en formato PDF.');
+            alert('✅ Generando reporte...\n\nEl reporte se descargará en breve.');
             return false;
         }
 
@@ -436,45 +559,96 @@
             const empleadoId = document.getElementById('empleado-id').value.trim();
             
             if (!empleadoId) {
-                alert('⚠️ Por favor ingresa un ID para buscar.');
                 return;
             }
             
-            // Simular búsqueda
             alert('🔍 Buscando empleado con ID: ' + empleadoId);
             
-            // Simular datos encontrados
             document.getElementById('empleado-nombre').value = 'María José Martínez Lomelí';
             document.getElementById('departamento').value = 'Recursos Humanos';
             document.getElementById('puesto').value = 'Gerente de RH';
         }
+
+        function seleccionarTipoReporte(tipo) {
+            alert('📊 Has seleccionado: ' + tipo);
+        }
     </script>
 </head>
 <body>
-    
-
-    <div class="module-title">
-        MÓDULO: REPORTES
+    <!-- Barra superior -->
+    <div class="top-nav">
+        <div class="top-nav-container">
+            <div class="logo-section">
+                <div class="logo-icon">📊</div>
+                <div class="logo-text">
+                    <h2>HR System</h2>
+                    <p>Generación de Reportes</p>
+                </div>
+            </div>
+            <div class="breadcrumb">
+                <a href="{% url 'Menu' %}">Inicio</a>
+                <span>›</span>
+                <span>Reportes</span>
+            </div>
+        </div>
     </div>
 
+    <!-- Menú de navegación -->
     <div class="menu-bar">
         <div class="menu-container">
             <button class="menu-btn" onclick="location.href='{% url 'Empleado' %}'">Empleado</button>
             <button class="menu-btn" onclick="location.href='{% url 'Asistencia' %}'">Asistencia</button>
             <button class="menu-btn" onclick="location.href='{% url 'Horarios' %}'">Horarios</button>
             <button class="menu-btn" onclick="location.href='{% url 'Reportes' %}'">Reportes</button>
-            <button class="menu-btn" onclick="location.href='{% url 'Dashboard' %}'">Dashboard</button>
-            <button class="menu-btn" onclick="location.href='{% url 'Menu' %}'">Menu</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Permisos' %}'">Permisos</button>
+            <button class="menu-btn" onclick="location.href='{% url 'Contacto' %}'">Contacto</button>
         </div>
     </div>
 
+    <!-- Contenido principal -->
     <div class="main-content">
+        <!-- Header de página -->
         <div class="page-header">
-            <h2>📊 Generación de Reportes</h2>
-            <p>Crea reportes detallados sobre empleados y su desempeño</p>
+            <h1><span>📊</span> Generación de Reportes Profesionales</h1>
+            <p>Crea informes detallados y personalizados sobre el desempeño y gestión de tu personal</p>
         </div>
 
+        <!-- Tipos de reportes rápidos -->
+        <div class="report-types">
+            <h3 class="report-types-title">
+                <span>⚡</span> Reportes Rápidos
+            </h3>
+            <div class="report-cards">
+                <div class="report-type-card" onclick="seleccionarTipoReporte('Asistencia Mensual')">
+                    <div class="report-type-icon">📅</div>
+                    <h4>Asistencia Mensual</h4>
+                    <p>Reporte completo de asistencia del mes</p>
+                </div>
+                <div class="report-type-card" onclick="seleccionarTipoReporte('Nómina')">
+                    <div class="report-type-icon">💰</div>
+                    <h4>Nómina</h4>
+                    <p>Resumen de pagos y deducciones</p>
+                </div>
+                <div class="report-type-card" onclick="seleccionarTipoReporte('Desempeño')">
+                    <div class="report-type-icon">⭐</div>
+                    <h4>Desempeño</h4>
+                    <p>Evaluación y métricas de personal</p>
+                </div>
+                <div class="report-type-card" onclick="seleccionarTipoReporte('Horas Extra')">
+                    <div class="report-type-icon">⏱️</div>
+                    <h4>Horas Extra</h4>
+                    <p>Control de tiempo adicional trabajado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de reporte personalizado -->
         <div class="report-container">
+            <div class="form-header">
+                <h2>Reporte Personalizado</h2>
+                <p>Configura y personaliza tu reporte según tus necesidades específicas</p>
+            </div>
+
             <form id="reporteForm" onsubmit="return generarReporte(event)">
                 
                 <!-- Información del Empleado -->
@@ -487,7 +661,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="empleado-id">ID del Empleado <span>*</span></label>
-                            <input type="text" id="empleado-id" name="empleado-id" placeholder="Ingresa el ID del empleado" onblur="buscarEmpleado()">
+                            <input type="text" id="empleado-id" name="empleado-id" placeholder="Ej: EMP001" onblur="buscarEmpleado()">
                         </div>
                         
                         <div class="form-group">
@@ -502,7 +676,7 @@
                         
                         <div class="form-group">
                             <label for="puesto">Puesto</label>
-                            <input type="text" id="puesto" name="puesto" placeholder="Puesto del empleado">
+                            <input type="text" id="puesto" name="puesto" placeholder="Cargo o puesto">
                         </div>
                     </div>
                 </div>
@@ -515,7 +689,8 @@
                     </h3>
                     
                     <div class="info-box">
-                        <p><strong>Nota:</strong> Selecciona el rango de fechas para el cual deseas generar el reporte. Este periodo determinará los datos de asistencia, horarios y desempeño que se incluirán.</p>
+                        <span class="info-icon">ℹ️</span>
+                        <p><strong>Importante:</strong> Selecciona el rango de fechas para el cual deseas generar el reporte. Este periodo determinará los datos de asistencia, horarios y desempeño que se incluirán en el documento final.</p>
                     </div>
                     
                     <div class="date-range">
@@ -524,7 +699,7 @@
                             <input type="date" id="fecha-inicio" name="fecha-inicio">
                         </div>
                         
-                        <span>→</span>
+                        <span class="date-separator">→</span>
                         
                         <div class="form-group">
                             <label for="fecha-fin">Fecha de Fin <span>*</span></label>
@@ -537,48 +712,48 @@
                 <div class="form-section">
                     <h3 class="section-title">
                         <span class="section-icon">📋</span>
-                        Información a Incluir en el Reporte
+                        Información a Incluir
                     </h3>
                     
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="asistencia" name="asistencia" checked>
-                            <label for="asistencia">Registro de Asistencia</label>
+                            <label for="asistencia">✅ Registro de Asistencia</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="puntualidad" name="puntualidad" checked>
-                            <label for="puntualidad">Puntualidad</label>
+                            <label for="puntualidad">⏰ Puntualidad</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="horarios" name="horarios" checked>
-                            <label for="horarios">Horarios Asignados</label>
+                            <label for="horarios">🕐 Horarios Asignados</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="faltas" name="faltas">
-                            <label for="faltas">Faltas y Retardos</label>
+                            <label for="faltas">❌ Faltas y Retardos</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="horas-extra" name="horas-extra">
-                            <label for="horas-extra">Horas Extra</label>
+                            <label for="horas-extra">⏱️ Horas Extra</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="vacaciones" name="vacaciones">
-                            <label for="vacaciones">Vacaciones y Permisos</label>
+                            <label for="vacaciones">🏖️ Vacaciones y Permisos</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="evaluacion" name="evaluacion">
-                            <label for="evaluacion">Evaluación de Desempeño</label>
+                            <label for="evaluacion">⭐ Evaluación de Desempeño</label>
                         </div>
                         
                         <div class="checkbox-item">
                             <input type="checkbox" id="incidencias" name="incidencias">
-                            <label for="incidencias">Incidencias</label>
+                            <label for="incidencias">⚠️ Incidencias</label>
                         </div>
                     </div>
                 </div>
@@ -587,7 +762,7 @@
                 <div class="form-section">
                     <h3 class="section-title">
                         <span class="section-icon">📝</span>
-                        Notas Adicionales
+                        Configuración Adicional
                     </h3>
                     
                     <div class="form-grid form-grid-full">
@@ -599,9 +774,10 @@
                         <div class="form-group">
                             <label for="formato">Formato de Salida</label>
                             <select id="formato" name="formato">
-                                <option value="pdf">PDF (Recomendado)</option>
-                                <option value="excel">Excel</option>
-                                <option value="word">Word</option>
+                                <option value="pdf">📄 PDF (Recomendado)</option>
+                                <option value="excel">📊 Excel</option>
+                                <option value="word">📝 Word</option>
+                                <option value="csv">📋 CSV</option>
                             </select>
                         </div>
                     </div>
