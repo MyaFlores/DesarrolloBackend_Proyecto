@@ -4,9 +4,6 @@ from django.shortcuts import render
 def Menu(request):
     return render(request, 'Menu.html')
 
-def Dashboard(request):
-    return render(request, 'Dashboard.html')
-
 def Empleado(request):
     return render(request, 'Empleado.html')
 
@@ -19,6 +16,9 @@ def Reportes(request):
 def Horarios(request):
     return render(request, 'Horarios.html')
 
+def Permisos(request):
+    return render(request, 'Permisos.html')
+
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from .forms import ContactForm
@@ -27,7 +27,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def contacto(request):
+def Contacto(request):
     enviado = False
     if request.method == "POST":
         form = ContactForm(request.POST)
