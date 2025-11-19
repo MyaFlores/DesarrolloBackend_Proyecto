@@ -16,6 +16,9 @@ def Asistencia(request):
 def Reportes(request):
     return render(request, 'Reportes.html')
 
+def Permisos(request):
+    return render(request, 'Permisos.html')
+
 def Horarios(request):
     return render(request, 'Horarios.html')
 
@@ -27,7 +30,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def contacto(request):
+def Contacto(request):
     enviado = False
     if request.method == "POST":
         form = ContactForm(request.POST)
