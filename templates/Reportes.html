@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generación de Reportes - HR System</title>
+    <title>Generación de Reportes - Nova Manager</title>
     <style>
         * {
             margin: 0;
@@ -506,73 +506,97 @@
             }
         }
     </style>
-    <script>
-        function generarReporte(event) {
+<script>
+    function generarReporte(event) {
+        const empleadoId = document.getElementById('empleado-id').value.trim();
+        const empleadoNombre = document.getElementById('empleado-nombre').value.trim();
+        const fechaInicio = document.getElementById('fecha-inicio').value;
+        const fechaFin = document.getElementById('fecha-fin').value;
+
+        if (!empleadoId && !empleadoNombre) {
+            alert('⚠️ Por favor ingresa el ID o nombre del empleado.');
             event.preventDefault();
-            
-            const empleadoId = document.getElementById('empleado-id').value.trim();
-            const empleadoNombre = document.getElementById('empleado-nombre').value.trim();
-            const fechaInicio = document.getElementById('fecha-inicio').value;
-            const fechaFin = document.getElementById('fecha-fin').value;
-            
-            if (!empleadoId && !empleadoNombre) {
-                alert('⚠️ Por favor ingresa el ID o nombre del empleado.');
-                return false;
-            }
-            
-            if (!fechaInicio || !fechaFin) {
-                alert('⚠️ Por favor selecciona el rango de fechas.');
-                return false;
-            }
-            
-            const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
-            const algunoSeleccionado = Array.from(checkboxes).some(cb => cb.checked);
-            
-            if (!algunoSeleccionado) {
-                alert('⚠️ Por favor selecciona al menos una opción para incluir en el reporte.');
-                return false;
-            }
-            
-            alert('✅ Generando reporte...\n\nEl reporte se descargará en breve.');
             return false;
         }
 
-        function vistaPrevia() {
-            const empleadoNombre = document.getElementById('empleado-nombre').value.trim();
-            
-            if (!empleadoNombre) {
-                alert('⚠️ Por favor ingresa el nombre del empleado para la vista previa.');
-                return;
-            }
-            
-            alert('👁️ Abriendo vista previa del reporte...');
+        if (!fechaInicio || !fechaFin) {
+            alert('⚠️ Por favor selecciona el rango de fechas.');
+            event.preventDefault();
+            return false;
         }
 
-        function limpiarFormulario() {
-            if (confirm('¿Deseas limpiar todos los campos del formulario?')) {
-                document.getElementById('reporteForm').reset();
-                alert('🗑️ Formulario limpiado exitosamente.');
-            }
+        // si todo está bien, dejamos que el formulario se envíe (POST)
+        return true;
+    }
+
+    function limpiarFormulario() {
+        if (!confirm('¿Deseas limpiar todos los campos del formulario?')) {
+            return;
+        }
+        const form = document.getElementById('reporteForm');
+        if (!form) return;
+
+        // limpiar textos, fechas y textarea
+        const textos = form.querySelectorAll('input[type="text"], input[type="date"], textarea');
+        textos.forEach(function (el) {
+            el.value = '';
+        });
+
+        // desmarcar todos los checkboxes
+        const checks = form.querySelectorAll('input[type="checkbox"]');
+        checks.forEach(function (el) {
+            el.checked = false;
+        });
+
+        // formato -> primer opción (PDF)
+        const formato = document.getElementById('formato');
+        if (formato) formato.selectedIndex = 0;
+    }
+
+    // búsqueda real
+    function buscarEmpleado() {
+    const empleadoId = document.getElementById('empleado-id').value.trim();
+    if (!empleadoId) {
+        return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    params.set('empleado_id', empleadoId);
+    window.location.search = params.toString();
+    }
+
+
+    function seleccionarTipoReporte(tipo) {
+        const todos = [
+            "asistencia",
+            "puntualidad",
+            "horarios",
+            "faltas",
+            "vacaciones",
+            "evaluacion",
+            "incidencias",
+            "horas-extra"
+        ];
+
+        function setChecks(idsActivos) {
+            todos.forEach(function (id) {
+                const cb = document.getElementById(id);
+                if (cb) {
+                    cb.checked = idsActivos.indexOf(id) !== -1;
+                }
+            });
         }
 
-        function buscarEmpleado() {
-            const empleadoId = document.getElementById('empleado-id').value.trim();
-            
-            if (!empleadoId) {
-                return;
-            }
-            
-            alert('🔍 Buscando empleado con ID: ' + empleadoId);
-            
-            document.getElementById('empleado-nombre').value = 'María José Martínez Lomelí';
-            document.getElementById('departamento').value = 'Recursos Humanos';
-            document.getElementById('puesto').value = 'Gerente de RH';
+        if (tipo === "Asistencia Mensual") {
+            setChecks(["asistencia", "puntualidad", "faltas"]);
+        } else if (tipo === "Nómina") {
+            setChecks(["asistencia", "horarios", "horas-extra"]);
+        } else if (tipo === "Desempeño") {
+            setChecks(["puntualidad", "evaluacion", "incidencias"]);
+        } else if (tipo === "Horas Extra") {
+            setChecks(["asistencia", "horas-extra"]);
         }
-
-        function seleccionarTipoReporte(tipo) {
-            alert('📊 Has seleccionado: ' + tipo);
-        }
-    </script>
+    }
+</script>
 </head>
 <body>
     <!-- Barra superior -->
@@ -581,7 +605,7 @@
             <div class="logo-section">
                 <div class="logo-icon">📊</div>
                 <div class="logo-text">
-                    <h2>HR System</h2>
+                    <h2>Nova Manager</h2>
                     <p>Generación de Reportes</p>
                 </div>
             </div>
@@ -634,11 +658,6 @@
                     <h4>Desempeño</h4>
                     <p>Evaluación y métricas de personal</p>
                 </div>
-                <div class="report-type-card" onclick="seleccionarTipoReporte('Horas Extra')">
-                    <div class="report-type-icon">⏱️</div>
-                    <h4>Horas Extra</h4>
-                    <p>Control de tiempo adicional trabajado</p>
-                </div>
             </div>
         </div>
 
@@ -649,7 +668,9 @@
                 <p>Configura y personaliza tu reporte según tus necesidades específicas</p>
             </div>
 
-            <form id="reporteForm" onsubmit="return generarReporte(event)">
+            <form id="reporteForm" method="post" onsubmit="return generarReporte(event)">
+            {% csrf_token %}
+
                 
                 <!-- Información del Empleado -->
                 <div class="form-section">
@@ -661,22 +682,30 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="empleado-id">ID del Empleado <span>*</span></label>
-                            <input type="text" id="empleado-id" name="empleado-id" placeholder="Ej: EMP001" onblur="buscarEmpleado()">
+                            <input type="text" id="empleado-id" name="empleado-id"
+                            placeholder="Ej: EMP001" onblur="buscarEmpleado()"
+                            value="{{ empleado_id_prefill }}">
                         </div>
                         
                         <div class="form-group">
                             <label for="empleado-nombre">Nombre Completo <span>*</span></label>
-                            <input type="text" id="empleado-nombre" name="empleado-nombre" placeholder="Nombre del empleado">
+                            <input type="text" id="empleado-nombre" name="empleado-nombre"
+                            placeholder="Nombre del empleado"
+                            value="{{ empleado_nombre_prefill }}">
                         </div>
                         
                         <div class="form-group">
                             <label for="departamento">Departamento</label>
-                            <input type="text" id="departamento" name="departamento" placeholder="Departamento">
+                            <input type="text" id="departamento" name="departamento"
+                            placeholder="Departamento"
+                            value="{{ empleado_departamento_prefill }}">
                         </div>
                         
                         <div class="form-group">
                             <label for="puesto">Puesto</label>
-                            <input type="text" id="puesto" name="puesto" placeholder="Cargo o puesto">
+                            <input type="text" id="puesto" name="puesto"
+                            placeholder="Cargo o puesto"
+                            value="{{ empleado_puesto_prefill }}">
                         </div>
                     </div>
                 </div>
@@ -737,23 +766,8 @@
                         </div>
                         
                         <div class="checkbox-item">
-                            <input type="checkbox" id="horas-extra" name="horas-extra">
-                            <label for="horas-extra">⏱️ Horas Extra</label>
-                        </div>
-                        
-                        <div class="checkbox-item">
                             <input type="checkbox" id="vacaciones" name="vacaciones">
                             <label for="vacaciones">🏖️ Vacaciones y Permisos</label>
-                        </div>
-                        
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="evaluacion" name="evaluacion">
-                            <label for="evaluacion">⭐ Evaluación de Desempeño</label>
-                        </div>
-                        
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="incidencias" name="incidencias">
-                            <label for="incidencias">⚠️ Incidencias</label>
                         </div>
                     </div>
                 </div>
@@ -774,11 +788,9 @@
                         <div class="form-group">
                             <label for="formato">Formato de Salida</label>
                             <select id="formato" name="formato">
-                                <option value="pdf">📄 PDF (Recomendado)</option>
-                                <option value="excel">📊 Excel</option>
-                                <option value="word">📝 Word</option>
-                                <option value="csv">📋 CSV</option>
-                            </select>
+    <option value="pdf">📄 PDF</option>
+    <option value="csv">📋 CSV</option>
+</select>
                         </div>
                     </div>
                 </div>
@@ -787,9 +799,6 @@
                 <div class="action-buttons">
                     <button type="submit" class="btn btn-generate">
                         <span>📄</span> Generar Reporte
-                    </button>
-                    <button type="button" class="btn btn-preview" onclick="vistaPrevia()">
-                        <span>👁️</span> Vista Previa
                     </button>
                     <button type="button" class="btn btn-clear" onclick="limpiarFormulario()">
                         <span>🗑️</span> Limpiar

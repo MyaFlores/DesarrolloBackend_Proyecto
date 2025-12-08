@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Empleados - HR System</title>
+    <title>Gestión de Empleados - Nova Manager</title>
     <style>
         * {
             margin: 0;
@@ -473,64 +473,73 @@
         }
     </style>
     <script>
-        function validarFormulario(event) {
-            event.preventDefault();
-            
-            const id = document.getElementById("id").value.trim();
-            const nombre = document.getElementById("nombre").value.trim();
-            const departamento = document.getElementById("departamento").value.trim();
-            const puesto = document.getElementById("puesto").value.trim();
-            const estatus = document.getElementById("estatus").value.trim();
-            
-            if (id === "" || nombre === "" || departamento === "" || puesto === "" || estatus === "") {
-                alert("⚠️ Por favor completa todos los campos obligatorios.");
-                return false;
+        function enviarAccion(accion) {
+            const form = document.getElementById("empleadoForm");
+            if (!form) return;
+            const actionInput = document.getElementById("form-action");
+            if (actionInput) {
+                actionInput.value = accion;
             }
-            
-            alert("✅ Empleado registrado exitosamente");
-            // Aquí iría la lógica para enviar el formulario
-            return true;
-        }
-
-        function actualizarEmpleado() {
-            const id = document.getElementById("id").value.trim();
-            if (!id) {
-                alert("⚠️ Por favor ingresa el ID del empleado a actualizar.");
-                return;
-            }
-            alert("📝 Actualizando información del empleado...");
-        }
-
-        function eliminarEmpleado() {
-            const id = document.getElementById("id").value.trim();
-            if (!id) {
-                alert("⚠️ Por favor ingresa el ID del empleado a eliminar.");
-                return;
-            }
-            if (confirm("⚠️ ¿Estás seguro de que deseas eliminar este empleado?\n\nEsta acción no se puede deshacer.")) {
-                alert("🗑️ Empleado eliminado exitosamente");
-            }
-        }
-
-        function buscarEmpleado() {
-            const id = document.getElementById("id").value.trim();
-            const nombre = document.getElementById("nombre").value.trim();
-            
-            if (!id && !nombre) {
-                alert("⚠️ Por favor ingresa un ID o nombre para buscar.");
-                return;
-            }
-            
-            alert("🔍 Buscando empleado...");
-            // Aquí iría la lógica de búsqueda
+            form.submit();
         }
 
         function limpiarFormulario() {
-            if (confirm("¿Deseas limpiar todos los campos del formulario?")) {
-                document.getElementById("empleadoForm").reset();
+            if (!confirm("¿Deseas limpiar todos los campos del formulario?")) {
+                return;
             }
+            const camposTexto = ["id", "nombre", "puesto"];
+            camposTexto.forEach(function (id) {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+
+            const dep = document.getElementById("departamento");
+            if (dep) dep.selectedIndex = 0;
+
+            const est = document.getElementById("estatus");
+            if (est) est.selectedIndex = 0;
+
+            const hiddenPk = document.getElementById("empleado_pk");
+            if (hiddenPk) hiddenPk.value = "";
+
+            const actionInput = document.getElementById("form-action");
+            if (actionInput) actionInput.value = "";
+        }
+
+        // NEW: send admin to signup page, optionally with the "Nombre completo" prefilled
+        function irARegistroEmpleado() {
+            const nombreInput = document.getElementById("nombre");
+            const nombre = nombreInput ? nombreInput.value.trim() : "";
+            let url = "{% url 'signup_employee' %}";
+
+            if (nombre) {
+                const params = new URLSearchParams();
+                params.set("nombre", nombre);
+                url = url + "?" + params.toString();
+            }
+            window.location.href = url;
+        }
+
+        function abrirReportesConEmpleado() {
+            const id = (document.getElementById("id")?.value || "").trim();
+            const nombre = (document.getElementById("nombre")?.value || "").trim();
+            const departamento = (document.getElementById("departamento")?.value || "").trim();
+            const puesto = (document.getElementById("puesto")?.value || "").trim();
+
+            const params = new URLSearchParams();
+            if (id) params.set("empleado_id", id);
+            if (nombre) params.set("empleado_nombre", nombre);
+            if (departamento) params.set("departamento", departamento);
+            if (puesto) params.set("puesto", puesto);
+
+            let url = "{% url 'Reportes' %}";
+            const qs = params.toString();
+            if (qs) url += "?" + qs;
+
+            window.location.href = url;
         }
     </script>
+
 </head>
 <body>
     <!-- Barra superior -->
@@ -539,7 +548,7 @@
             <div class="logo-section">
                 <div class="logo-icon">👥</div>
                 <div class="logo-text">
-                    <h2>HR System</h2>
+                    <h2>Nova Manager</h2>
                     <p>Gestión de Empleados</p>
                 </div>
             </div>
@@ -572,48 +581,57 @@
         </div>
 
         <!-- Estadísticas rápidas -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">👥</div>
-                <div class="stat-content">
-                    <h3>342</h3>
-                    <p>Total Empleados</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-content">
-                    <h3>325</h3>
-                    <p>Activos</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-content">
-                    <h3>8</h3>
-                    <p>Departamentos</p>
-                </div>
-            </div>
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+            <h3>{{ total_empleados }}</h3>
+            <p>Total Empleados</p>
         </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+            <h3>{{ empleados_activos }}</h3>
+            <p>Activos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+            <h3>{{ departamentos_count }}</h3>
+            <p>Departamentos</p>
+        </div>
+    </div>
+</div>
 
         <!-- Acciones rápidas -->
-        <div class="quick-actions">
-            <h3 class="quick-actions-title">Acciones Rápidas</h3>
-            <div class="action-buttons-grid">
-                <button class="action-btn-quick" onclick="limpiarFormulario()">
-                    <span>📝</span> Nuevo Registro
-                </button>
-                <button class="action-btn-quick" onclick="buscarEmpleado()">
-                    <span>🔍</span> Búsqueda Avanzada
-                </button>
-                <button class="action-btn-quick" onclick="location.href='{% url 'Reportes' %}'">
-                    <span>📄</span> Generar Reporte
-                </button>
-                <button class="action-btn-quick" onclick="alert('📥 Exportando datos...')">
-                    <span>💾</span> Exportar Datos
-                </button>
+<div class="quick-actions">
+    <h3 class="quick-actions-title">Acciones Rápidas</h3>
+    <div class="action-buttons-grid">
+        <button type="button" class="action-btn-quick" onclick="limpiarFormulario()">
+            <span>📝</span> Nuevo Registro
+        </button>
+        <button type="button" class="action-btn-quick" onclick="abrirReportesConEmpleado()">
+            <span>📄</span> Generar Reporte
+        </button>
+        <button type="button" class="action-btn-quick"
+                onclick="window.location.href='{% url 'Empleado' %}?export=json'">
+            <span>💾</span> Exportar Datos
+        </button>
+    </div>
+</div>
+
+        {% if mensaje %}
+            <div style="margin-bottom:15px; padding:10px 14px; border-radius:8px; background:#e8f5e9; color:#1b5e20;">
+                {{ mensaje }}
             </div>
-        </div>
+        {% endif %}
+        {% if error %}
+            <div style="margin-bottom:15px; padding:10px 14px; border-radius:8px; background:#ffebee; color:#c62828;">
+                {{ error }}
+            </div>
+        {% endif %}
 
         <!-- Formulario -->
         <div class="form-container">
@@ -627,7 +645,11 @@
                 <p>Los campos marcados con <span style="color: #e74c3c;">*</span> son obligatorios</p>
             </div>
 
-            <form id="empleadoForm" onsubmit="return validarFormulario(event)">
+            <form id="empleadoForm" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" id="form-action">
+    <input type="hidden" name="empleado_pk" id="empleado_pk" value="{% if empleado_seleccionado %}{{ empleado_seleccionado.id }}{% endif %}">
+
                 <!-- Sección: Información Básica -->
                 <div class="form-section">
                     <h3 class="section-title">
@@ -639,7 +661,8 @@
                                 ID del Empleado
                                 <span class="required-indicator">*</span>
                             </label>
-                            <input type="text" id="id" name="id" placeholder="Ej: EMP001">
+                            <input type="text" id="id" name="id" placeholder="Ej: EMP001"
+       value="{% if empleado_seleccionado %}{{ empleado_seleccionado.id }}{% endif %}">
                         </div>
 
                         <div class="form-group">
@@ -647,7 +670,8 @@
                                 Nombre Completo
                                 <span class="required-indicator">*</span>
                             </label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Nombre completo del empleado">
+                            <input type="text" id="nombre" name="nombre" placeholder="Nombre completo del empleado"
+       value="{% if empleado_seleccionado %}{{ empleado_seleccionado.nombre }} {{ empleado_seleccionado.apellido }}{% endif %}">
                         </div>
 
                         <div class="form-group">
@@ -673,7 +697,9 @@
                                 Puesto
                                 <span class="required-indicator">*</span>
                             </label>
-                            <input type="text" id="puesto" name="puesto" placeholder="Cargo o puesto">
+                            <input type="text" id="puesto" name="puesto" placeholder="Cargo o puesto"
+       value="{% if empleado_seleccionado %}{{ empleado_seleccionado.puesto }}{% endif %}">
+
                         </div>
 
                         <div class="form-group form-row-full">
@@ -682,34 +708,85 @@
                                 <span class="required-indicator">*</span>
                             </label>
                             <select id="estatus" name="estatus">
-                                <option value="">Seleccionar estatus...</option>
-                                <option value="activo">✅ Activo</option>
-                                <option value="inactivo">⛔ Inactivo</option>
-                                <option value="vacaciones">🏖️ En vacaciones</option>
-                                <option value="permiso">📋 Con permiso</option>
-                                <option value="incapacidad">🏥 Incapacidad</option>
-                            </select>
+    <option value="">Seleccionar estatus...</option>
+    <option value="activo" {% if estatus_actual == 'activo' %}selected{% endif %}>✅ Activo</option>
+    <option value="inactivo" {% if estatus_actual == 'inactivo' %}selected{% endif %}>⛔ Inactivo</option>
+    <option value="vacaciones">🏖️ En vacaciones</option>
+    <option value="permiso">📋 Con permiso</option>
+    <option value="incapacidad">🏥 Incapacidad</option>
+</select>
                         </div>
                     </div>
                 </div>
 
                 <!-- Botones de acción -->
-                <div class="action-buttons">
-                    <button type="submit" class="btn btn-add">
-                        <span>➕</span> Agregar
-                    </button>
-                    <button type="button" class="btn btn-update" onclick="actualizarEmpleado()">
-                        <span>📝</span> Actualizar
-                    </button>
-                    <button type="button" class="btn btn-delete" onclick="eliminarEmpleado()">
-                        <span>🗑️</span> Eliminar
-                    </button>
-                    <button type="button" class="btn btn-search" onclick="buscarEmpleado()">
-                        <span>🔍</span> Buscar
-                    </button>
-                </div>
+<div class="action-buttons">
+    <button type="button" class="btn btn-add" onclick="irARegistroEmpleado()">
+        <span>➕</span> Agregar
+    </button>
+    <button type="button" class="btn btn-update" onclick="enviarAccion('actualizar')">
+        <span>📝</span> Actualizar
+    </button>
+    <button type="button" class="btn btn-delete"
+            onclick="if (confirm('⚠️ ¿Estás seguro de que deseas marcar este empleado como inactivo?')) { enviarAccion('eliminar'); }">
+        <span>🗑️</span> Eliminar
+    </button>
+    <button type="button" class="btn btn-search" onclick="enviarAccion('buscar')">
+        <span>🔍</span> Buscar
+    </button>
+</div>
+            </form>
             </form>
         </div>
-    </div>
+
+        <!-- Lista de empleados (datos reales) -->
+        <div class="form-container" style="margin-top: 30px;">
+            <div class="form-header">
+                <h2>Empleados registrados</h2>
+                <p>Resumen de los empleados en el sistema</p>
+            </div>
+
+            {% if empleados %}
+                <div style="overflow-x:auto; margin-top: 10px;">
+                    <table style="width:100%; border-collapse:collapse; font-size:0.92em;">
+                        <thead>
+                            <tr style="background:#f3f8f3;">
+                                <th style="text-align:left; padding:8px;">ID</th>
+                                <th style="text-align:left; padding:8px;">Nombre</th>
+                                <th style="text-align:left; padding:8px;">Correo</th>
+                                <th style="text-align:left; padding:8px;">Teléfono</th>
+                                <th style="text-align:left; padding:8px;">Puesto</th>
+                                <th style="text-align:left; padding:8px;">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for emp in empleados %}
+                                <tr style="border-top:1px solid #e0e0e0;">
+                                    <td style="padding:8px;">{{ emp.id }}</td>
+                                    <td style="padding:8px;">
+                                        {{ emp.nombre }} {{ emp.apellido }}
+                                    </td>
+                                    <td style="padding:8px;">{{ emp.email }}</td>
+                                    <td style="padding:8px;">{{ emp.telefono }}</td>
+                                    <td style="padding:8px;">{{ emp.puesto|default:"—" }}</td>
+                                    <td style="padding:8px;">
+                                        {% if emp.estado %}
+                                            <span style="color:#1b5e20; font-weight:600;">Activo</span>
+                                        {% else %}
+                                            <span style="color:#c0392b; font-weight:600;">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="margin-top:10px; color:#555;">
+                    No hay empleados registrados todavía.
+                </p>
+            {% endif %}
+        </div>
+    </div> <!-- .main-content -->
 </body>
 </html>

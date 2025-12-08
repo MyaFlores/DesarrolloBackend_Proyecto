@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Recursos Humanos - Inicio</title>
+    <title>Inicio - Nova Manager</title>
     <style>
         * {
             margin: 0;
@@ -463,19 +463,52 @@
             <div class="logo-section">
                 <div class="logo-icon">👥</div>
                 <div class="logo-text">
-                    <h2>HR System</h2>
-                    <p>Recursos Humanos Profesional</p>
+                    <h2>Nova Manager</h2>
+                    <p>InnovaGroup</p>
                 </div>
             </div>
-            <div class="user-section">
-                <div class="user-info">
-                    <p>Administrador</p>
-                    <span>admin@empresa.com</span>
-                </div>
-                <div class="user-avatar">A</div>
+                <div class=""></div>
             </div>
         </div>
     </div>
+
+     <!-- Advertencia para no admins -->
+
+     {% if messages %}
+  <div id="nm-messages-container" aria-live="polite"
+       style="position:fixed;top:18px;right:18px;z-index:9999;">
+    {% for message in messages %}
+      <div class="nm-toast" role="alert" data-level="{{ message.level }}">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;
+                    background:#fff;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.12);
+                    border-left:6px solid #f7b731; max-width:360px;">
+          <div style="font-weight:700;color:#333;">Aviso</div>
+          <div style="color:#333;flex:1;">{{ message }}</div>
+          <button class="nm-toast-close" aria-label="Cerrar"
+                  style="background:transparent;border:none;font-size:18px;cursor:pointer;color:#666">
+            &times;
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    (function(){
+      const container = document.getElementById('nm-messages-container');
+      if(!container) return;
+      const toasts = container.querySelectorAll('.nm-toast');
+      toasts.forEach((t, idx) => {
+        const card = t.firstElementChild;
+        // Auto-dismiss after 4s
+        setTimeout(()=> card.remove(), 4000 + idx*200);
+        // close button
+        const btn = card.querySelector('.nm-toast-close');
+        btn && btn.addEventListener('click', ()=> card.remove());
+      });
+    })();
+  </script>
+{% endif %}
 
     <!-- Hero Section -->
     <div class="hero-section">
@@ -484,14 +517,6 @@
             <p>Gestión integral y profesional del capital humano de tu empresa</p>
             
             <div class="stats-row">
-                <div class="stat-item">
-                    <span class="stat-number">500+</span>
-                    <span class="stat-label">Empleados Activos</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">98%</span>
-                    <span class="stat-label">Satisfacción</span>
-                </div>
                 <div class="stat-item">
                     <span class="stat-number">24/7</span>
                     <span class="stat-label">Disponibilidad</span>
@@ -615,47 +640,8 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Sobre Nosotros</h3>
-                <p>Sistema profesional de gestión de recursos humanos diseñado para empresas modernas que buscan eficiencia y resultados.</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Enlaces Rápidos</h3>
-                <ul>
-                    <li>Documentación</li>
-                    <li>Preguntas Frecuentes</li>
-                    <li>Tutoriales</li>
-                    <li>Soporte Técnico</li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <ul>
-                    <li>📧 contacto@hrsystem.com</li>
-                    <li>📞 +52 (664) 123-4567</li>
-                    <li>📍 Tijuana, Baja California</li>
-                    <li>🕐 Lun - Vie: 9:00 - 18:00</li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Legal</h3>
-                <ul>
-                    <li>Términos y Condiciones</li>
-                    <li>Política de Privacidad</li>
-                    <li>Aviso Legal</li>
-                    <li>Cookies</li>
-                </ul>
-            </div>
-        </div>
-
         <div class="footer-bottom">
-            <p>&copy; 2025 HR System - Sistema de Recursos Humanos. Todos los derechos reservados.</p>
+            <p></p>
         </div>
     </div>
 </body>

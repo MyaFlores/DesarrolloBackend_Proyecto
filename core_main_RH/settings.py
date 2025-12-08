@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-a%!6*3!w86tz-ro94#!ys-*q2^r*ugq2b4u0d2kj8r)tsrc)50
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["myaflores05.pythonanywhere.com"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -46,7 +46,7 @@ ROOT_URLCONF = 'core_main_RH.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,6 +89,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Authentication URLs
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'Menu'      # after successful login
+LOGOUT_REDIRECT_URL = 'login'
 
 
 # Internationalization
