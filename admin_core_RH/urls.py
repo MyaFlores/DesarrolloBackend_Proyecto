@@ -4,6 +4,7 @@ from . import views
 
 
 urlpatterns = [
+    path('', lambda request: redirect('/Menu/')), 
     path('Menu/', Menu, name='Menu'),
     path('Dashboard/', Dashboard, name='Dashboard'),
     path('Empleado/', Empleado, name='Empleado'),

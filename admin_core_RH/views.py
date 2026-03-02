@@ -22,6 +22,9 @@ def Permisos(request):
 def Horarios(request):
     return render(request, 'Horarios.html')
 
+def Contacto(request):
+     return render(request, 'Contacto.html')
+
 from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from .forms import ContactForm
@@ -62,6 +65,6 @@ def Contacto(request):
     else:
         form = ContactForm()
 
-    return render(request, 'contacto.html', {'form': form, 'enviado': enviado})
+    return render(request, 'Contacto.html', {'form': form, 'enviado': enviado})
 
 
